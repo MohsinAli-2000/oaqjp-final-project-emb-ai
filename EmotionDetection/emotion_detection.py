@@ -9,7 +9,18 @@ def emotion_detector(text_to_analyze):
     
     response = requests.post(url, json=myobj, headers=headers)
     
-    # Catch any connection errors cleanly instead of crashing
+    # Specific error handling for status code 400 (Blank entries)
+    if response.status_code == 400:
+        return {
+            'anger': None,
+            'disgust': None,
+            'fear': None,
+            'joy': None,
+            'sadness': None,
+            'dominant_emotion': None
+        }
+    
+    # Catch any other unexpected server errors cleanly
     if response.status_code != 200:
         return {
             'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'sadness': 0,
